@@ -223,29 +223,36 @@ export class ClientsService {
   }
 
   async updatePassword(
-      id: number,
-      updatePasswordClientDto: UpdatePasswordClientDto
-    ) {
-      const client = await this.findOne(id);
-  
-      if (!client) {
-        throw new NotFoundException("Bunday client mavjud emas");
-      }
-  
-      const { oldPassword, confirmPassword, newPassword } = updatePasswordClientDto;
-  
-      if (oldPassword !== confirmPassword) {
-        throw new BadRequestException("Parollar bir-birga mos emas");
-      }
-  
-      const hashedPassword = await bcrypt.hash(newPassword, 7);
-  
-      client.passwordHash = hashedPassword;
-      this.clientRepo.save(client);
-      return {
-        message: "Client Paroli o'zgartirildi",
-      };
+    id: number,
+    updatePasswordClientDto: UpdatePasswordClientDto
+  ) {
+    const { oldPassword, confirmPassword, newPassword } =
+      updatePasswordClientDto;
+
+    const client = await this.findOne(id);
+
+    if (!client) {
+      throw new NotFoundException("Bunday client mavjud emas");
     }
+
+    const validPassword = await bcrypt.compare(oldPassword, client.passwordHash)
+
+    if(!validPassword){
+      throw new BadRequestException("Parolni xato kiritdingiz")
+    }
+
+    if (newPassword !== confirmPassword) {
+      throw new BadRequestException("Parollar bir-birga mos emas");
+    }
+
+    const hashedPassword = await bcrypt.hash(newPassword, 7);
+
+    client.passwordHash = hashedPassword;
+    this.clientRepo.save(client);
+    return {
+      message: "Client Paroli o'zgartirildi",
+    };
+  }
 
   async generateToken(client: Client) {
     const payload = {

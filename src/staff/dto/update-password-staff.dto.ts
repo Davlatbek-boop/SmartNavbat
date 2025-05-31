@@ -1,7 +1,7 @@
-import { IsString, MinLength, IsNotEmpty, ValidateIf } from 'class-validator';
+import { IsString, MinLength, IsNotEmpty } from 'class-validator';
 import { ApiProperty } from '@nestjs/swagger';
 
-export class UpdatePasswordClientDto {
+export class UpdatePasswordStaffDto {
   @ApiProperty({
     example: 'OldP@ssw0rd',
     description: 'Joriy parol (eski parol)',

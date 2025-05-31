@@ -1,4 +1,11 @@
-import { Column, Entity, OneToMany, PrimaryGeneratedColumn } from "typeorm";
+import {
+  Column,
+  CreateDateColumn,
+  Entity,
+  OneToMany,
+  PrimaryGeneratedColumn,
+  UpdateDateColumn,
+} from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Notification } from "../../notifications/entities/notification.entity";
 
@@ -45,6 +52,22 @@ export class Client {
   })
   @Column()
   activationLink: string;
+
+  @ApiProperty({
+    example: "2025-05-30T09:55:00Z",
+    description: "Yaratilgan vaqti",
+    type: String,
+  })
+  @CreateDateColumn()
+  createdAt: Date;
+
+  @ApiProperty({
+    example: "2025-05-30T09:57:00Z",
+    description: "So‘nggi yangilangan vaqti",
+    type: String,
+  })
+  @UpdateDateColumn()
+  updatedAt: Date;
 
   @OneToMany(() => Notification, (notification) => notification.client)
   notifications: Notification[];

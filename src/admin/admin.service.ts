@@ -196,15 +196,25 @@ export class AdminService {
     id: number,
     updatePasswordAdminDto: UpdatePasswordAdminDto
   ) {
+    const { oldPassword, confirmPassword, newPassword } =
+      updatePasswordAdminDto;
+
     const admin = await this.findOne(id);
 
     if (!admin) {
       throw new NotFoundException("Bunday admin mavjud emas");
     }
 
-    const { oldPassword, confirmPassword, newPassword } = updatePasswordAdminDto;
+    const validPassword = await bcrypt.compare(
+      oldPassword,
+      admin.passwordHash
+    );
 
-    if (oldPassword !== confirmPassword) {
+    if (!validPassword) {
+      throw new BadRequestException("Parolni xato kiritdingiz");
+    }
+
+    if (newPassword !== confirmPassword) {
       throw new BadRequestException("Parollar bir-birga mos emas");
     }
 
