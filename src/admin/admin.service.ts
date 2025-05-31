@@ -202,13 +202,13 @@ export class AdminService {
       throw new NotFoundException("Bunday admin mavjud emas");
     }
 
-    const { password, confirmPassword } = updatePasswordAdminDto;
+    const { oldPassword, confirmPassword, newPassword } = updatePasswordAdminDto;
 
-    if (password !== confirmPassword) {
+    if (oldPassword !== confirmPassword) {
       throw new BadRequestException("Parollar bir-birga mos emas");
     }
 
-    const hashedPassword = await bcrypt.hash(password, 7);
+    const hashedPassword = await bcrypt.hash(newPassword, 7);
 
     admin.passwordHash = hashedPassword;
     this.adminRepo.save(admin);

@@ -50,10 +50,20 @@ export class Admin {
   @ApiProperty({ example: "refresh_token_hash_here" })
   refreshTokenHash: string;
 
+  @ApiProperty({
+    example: '2025-05-30T09:55:00Z',
+    description: 'Yaratilgan vaqti',
+    type: String,
+  })
   @Field()
   @CreateDateColumn()
   createdAt: Date;
 
+   @ApiProperty({
+    example: '2025-05-30T09:57:00Z',
+    description: 'So‘nggi yangilangan vaqti',
+    type: String,
+  })
   @Field()
   @UpdateDateColumn()
   updatedAt: Date;

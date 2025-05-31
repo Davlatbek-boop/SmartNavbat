@@ -4,6 +4,10 @@ import { ConfigModule } from '@nestjs/config';
 import { TypeOrmModule } from '@nestjs/typeorm';
 import { AdminModule } from './admin/admin.module';
 import { Admin } from './admin/entities/admin.entity';
+import { NotificationsModule } from './notifications/notifications.module';
+import { ClientsModule } from './clients/clients.module';
+import { Notification } from './notifications/entities/notification.entity';
+import { Client } from './clients/entities/client.entity';
 
 
 
@@ -18,10 +22,12 @@ import { Admin } from './admin/entities/admin.entity';
       password: process.env.PG_PASSWORD,
       database: process.env.PG_DB,
       autoLoadEntities: true,
-      entities: [Admin],
+      entities: [Admin, Notification, Client],
       synchronize: true, 
     }),
     AdminModule,
+    NotificationsModule,
+    ClientsModule,
   ],
   controllers: [],
   providers: [],
