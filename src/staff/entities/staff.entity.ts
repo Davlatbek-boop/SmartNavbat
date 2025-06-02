@@ -11,6 +11,8 @@ import {
 import { Role } from "../../roles/entities/role.entity";
 import { Branch } from "../../branches/entities/branch.entity";
 import { StaffSession } from "../../staff-sessions/entities/staff-session.entity";
+import { Announcement } from "../../announcements/entities/announcement.entity";
+import { Service } from "../../services/entities/service.entity";
 
 @Entity()
 export class Staff {
@@ -50,21 +52,21 @@ export class Staff {
   branchId: number;
 
   @ApiProperty({ example: true, description: "Xodim faolmi yoki yo‘qmi" })
-  @Column({default: true})
+  @Column({ default: true })
   isActive: boolean;
 
   @ApiProperty({
     example: "2025-05-31T10:30:00.000Z",
     description: "Oxirgi login sanasi",
   })
-  @Column({default: "2025-05-31T10:30:00.000Z"})
+  @Column({ default: "2025-05-31T10:30:00.000Z" })
   lastLogin: Date;
 
   @ApiProperty({
     example: "hashed_refresh_token_string",
     description: "Refresh token hash",
   })
-  @Column({default: ""})
+  @Column({ default: "" })
   refreshTokenHash: string;
 
   @ApiProperty({
@@ -81,12 +83,18 @@ export class Staff {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @ManyToOne(()=> Role, (role)=>role.staffs)
-  role: Role
+  @ManyToOne(() => Role, (role) => role.staffs)
+  role: Role;
 
-  @ManyToOne(()=> Branch, (branch)=> branch.staffs)
-  branch: Branch
+  @ManyToOne(() => Branch, (branch) => branch.staffs)
+  branch: Branch;
 
-  @OneToMany(()=> StaffSession, (staffSession)=> staffSession.staff)
-  staffSession: StaffSession[]
+  @OneToMany(() => StaffSession, (staffSession) => staffSession.staff)
+  staffSession: StaffSession[];
+
+  @OneToMany(() => Announcement, (announcement) => announcement.staff)
+  announcement: Announcement[];
+
+  @OneToMany(() => Service, (service) => service.staff)
+  service: Service[];
 }

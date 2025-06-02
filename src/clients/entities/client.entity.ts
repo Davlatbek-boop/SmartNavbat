@@ -8,6 +8,7 @@ import {
 } from "typeorm";
 import { ApiProperty } from "@nestjs/swagger";
 import { Notification } from "../../notifications/entities/notification.entity";
+import { Ticket } from "../../tickets/entities/ticket.entity";
 
 @Entity()
 export class Client {
@@ -71,4 +72,7 @@ export class Client {
 
   @OneToMany(() => Notification, (notification) => notification.client)
   notifications: Notification[];
+
+  @OneToMany(() => Ticket, (ticket) => ticket.client)
+  ticket: Ticket[];
 }

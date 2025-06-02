@@ -12,7 +12,7 @@ import { CreateBranchDto } from "./dto/create-branch.dto";
 import { UpdateBranchDto } from "./dto/update-branch.dto";
 import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
 
-@ApiTags("Filiallar") // Swagger'da grup nomi
+@ApiTags("Branchs-Filiallar") // Swagger'da grup nomi
 @Controller("branches")
 export class BranchesController {
   constructor(private readonly branchesService: BranchesService) {}

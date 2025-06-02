@@ -36,4 +36,13 @@ export class MailService {
       },
     });
   }
+
+  async sendMailNewTicket(info:object, email:string) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: "Siz Yangi navbat oldingiz",
+      template: "./ticket",
+      context: info
+    });
+  }
 }

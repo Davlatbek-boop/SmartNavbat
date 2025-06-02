@@ -8,6 +8,10 @@ import {
   UpdateDateColumn,
 } from "typeorm";
 import { Staff } from "../../staff/entities/staff.entity";
+import { Announcement } from "../../announcements/entities/announcement.entity";
+import { Service } from "../../services/entities/service.entity";
+import { Counter } from "../../counter/entities/counter.entity";
+import { Ticket } from "../../tickets/entities/ticket.entity";
 
 @Entity()
 export class Branch {
@@ -48,14 +52,14 @@ export class Branch {
     example: "41.311081",
     description: "Filialning latitude koordinatasi",
   })
-  @Column({default: ""})
+  @Column({ default: "" })
   lantitude: string;
 
   @ApiProperty({
     example: "69.279563",
     description: "Filialning longitude koordinatasi",
   })
-  @Column({default: ""})
+  @Column({ default: "" })
   longitude: string;
 
   @ApiProperty({ example: "09:00 - 18:00", description: "Filial ish vaqti" })
@@ -63,7 +67,7 @@ export class Branch {
   workingHours: string;
 
   @ApiProperty({ example: "true", description: "Filial faolmi yoki yo‘q" })
-  @Column({default: true})
+  @Column({ default: true })
   isActive: boolean;
 
   @ApiProperty({
@@ -80,6 +84,18 @@ export class Branch {
   @UpdateDateColumn()
   updatedAt: Date;
 
-  @OneToMany(()=> Staff, (staffs)=> staffs.branch)
-  staffs: Staff
+  @OneToMany(() => Staff, (staffs) => staffs.branch)
+  staffs: Staff[];
+
+  @OneToMany(() => Announcement, (announcement) => announcement.staff)
+  announcement: Announcement[];
+
+  @OneToMany(() => Service, (services) => services.branch)
+  services: Service[];
+
+  @OneToMany(() => Counter, (counter) => counter.branch)
+  counter: Counter[];
+
+  @OneToMany(() => Ticket, (ticket) => ticket.branch)
+  ticket: Ticket;
 }

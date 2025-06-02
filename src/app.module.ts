@@ -15,7 +15,16 @@ import { Role } from "./roles/entities/role.entity";
 import { Staff } from "./staff/entities/staff.entity";
 import { StaffSessionsModule } from "./staff-sessions/staff-sessions.module";
 import { StaffSession } from "./staff-sessions/entities/staff-session.entity";
-import { AnnouncementsModule } from './announcements/announcements.module';
+import { AnnouncementsModule } from "./announcements/announcements.module";
+import { Announcement } from "./announcements/entities/announcement.entity";
+import { ServicesModule } from "./services/services.module";
+import { Service } from "./services/entities/service.entity";
+import { ServiceScheduleModule } from "./service-schedule/service-schedule.module";
+import { CounterModule } from "./counter/counter.module";
+import { Counter } from "./counter/entities/counter.entity";
+import { TicketsModule } from './tickets/tickets.module';
+import { Ticket } from "./tickets/entities/ticket.entity";
+import { CalledTicketsModule } from './called-tickets/called-tickets.module';
 
 @Module({
   imports: [
@@ -36,6 +45,10 @@ import { AnnouncementsModule } from './announcements/announcements.module';
         Role,
         Staff,
         StaffSession,
+        Announcement,
+        Service,
+        Counter,
+        Ticket
       ],
       synchronize: true,
     }),
@@ -47,6 +60,11 @@ import { AnnouncementsModule } from './announcements/announcements.module';
     RolesModule,
     StaffSessionsModule,
     AnnouncementsModule,
+    ServicesModule,
+    ServiceScheduleModule,
+    CounterModule,
+    TicketsModule,
+    CalledTicketsModule,
   ],
   controllers: [],
   providers: [],

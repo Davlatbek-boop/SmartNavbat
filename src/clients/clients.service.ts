@@ -178,7 +178,7 @@ export class ClientsService {
   }
 
   findAll() {
-    return this.clientRepo.find({ relations: ["notifications"] });
+    return this.clientRepo.find();
   }
 
   findOne(id: number) {
