@@ -22,9 +22,14 @@ import { Service } from "./services/entities/service.entity";
 import { ServiceScheduleModule } from "./service-schedule/service-schedule.module";
 import { CounterModule } from "./counter/counter.module";
 import { Counter } from "./counter/entities/counter.entity";
-import { TicketsModule } from './tickets/tickets.module';
+import { TicketsModule } from "./tickets/tickets.module";
 import { Ticket } from "./tickets/entities/ticket.entity";
-import { CalledTicketsModule } from './called-tickets/called-tickets.module';
+import { CalledTicketsModule } from "./called-tickets/called-tickets.module";
+import { CalledTicket } from "./called-tickets/entities/called-ticket.entity";
+import { FeedbackModule } from './feedback/feedback.module';
+import { Feedback } from "./feedback/entities/feedback.entity";
+import { TicketStatusLogModule } from './ticket-status-log/ticket-status-log.module';
+import { TicketStatusLog } from "./ticket-status-log/entities/ticket-status-log.entity";
 
 @Module({
   imports: [
@@ -48,7 +53,10 @@ import { CalledTicketsModule } from './called-tickets/called-tickets.module';
         Announcement,
         Service,
         Counter,
-        Ticket
+        Ticket,
+        CalledTicket,
+        Feedback,
+        TicketStatusLog
       ],
       synchronize: true,
     }),
@@ -65,6 +73,8 @@ import { CalledTicketsModule } from './called-tickets/called-tickets.module';
     CounterModule,
     TicketsModule,
     CalledTicketsModule,
+    FeedbackModule,
+    TicketStatusLogModule,
   ],
   controllers: [],
   providers: [],

@@ -13,6 +13,8 @@ import { Branch } from "../../branches/entities/branch.entity";
 import { StaffSession } from "../../staff-sessions/entities/staff-session.entity";
 import { Announcement } from "../../announcements/entities/announcement.entity";
 import { Service } from "../../services/entities/service.entity";
+import { Feedback } from "../../feedback/entities/feedback.entity";
+import { TicketStatusLog } from "../../ticket-status-log/entities/ticket-status-log.entity";
 
 @Entity()
 export class Staff {
@@ -97,4 +99,10 @@ export class Staff {
 
   @OneToMany(() => Service, (service) => service.staff)
   service: Service[];
+
+  @OneToMany(() => Feedback, (feedback) => feedback.client)
+  feedback: Feedback[];
+
+  @OneToMany(() => TicketStatusLog, (ticketStatusLog) => ticketStatusLog.ticket)
+  ticketStatusLog: TicketStatusLog[];
 }

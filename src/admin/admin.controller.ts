@@ -25,12 +25,12 @@ import {
 } from "@nestjs/swagger";
 import { UpdatePasswordAdminDto } from "./dto/update-password.dto";
 
+
 @ApiTags("Admin")
 @Controller("admin")
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
-  @ApiBearerAuth()
   @Post()
   @ApiOperation({ summary: "Yangi admin yaratish" })
   @ApiResponse({ status: 201, description: "Admin muvaffaqiyatli yaratildi" })

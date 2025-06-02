@@ -234,7 +234,7 @@ export class StaffService {
   }
 
   findByEmail(email: string) {
-    return this.staffRepo.findOneBy({ email });
+    return this.staffRepo.findOne({ where: { email }, relations: ["role"] });
   }
 
   async generateToken(staff: Staff) {
@@ -243,7 +243,9 @@ export class StaffService {
       name: staff.fullName,
       email: staff.email,
       is_active: staff.isActive,
+      role: staff.role.name,
     };
+
 
     const accessToken = this.jwtService.sign(payload, {
       secret: process.env.ACCESS_TOKEN_KEY,

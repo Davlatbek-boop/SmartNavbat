@@ -260,6 +260,7 @@ export class ClientsService {
       name: client.fullName,
       email: client.email,
       is_active: client.isActive,
+      role: "client"
     };
 
     const accessToken = this.jwtService.sign(payload, {

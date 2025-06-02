@@ -1,8 +1,19 @@
-import { Module } from '@nestjs/common';
-import { CalledTicketsService } from './called-tickets.service';
-import { CalledTicketsController } from './called-tickets.controller';
+import { Module } from "@nestjs/common";
+import { CalledTicketsService } from "./called-tickets.service";
+import { CalledTicketsController } from "./called-tickets.controller";
+import { TypeOrmModule } from "@nestjs/typeorm";
+import { CalledTicket } from "./entities/called-ticket.entity";
+import { StaffModule } from "../staff/staff.module";
+import { TicketsModule } from "../tickets/tickets.module";
+import { CounterModule } from "../counter/counter.module";
 
 @Module({
+  imports: [
+    TypeOrmModule.forFeature([CalledTicket]),
+    StaffModule,
+    TicketsModule,
+    CounterModule,
+  ],
   controllers: [CalledTicketsController],
   providers: [CalledTicketsService],
 })

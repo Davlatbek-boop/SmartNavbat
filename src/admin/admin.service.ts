@@ -238,6 +238,7 @@ export class AdminService {
       email: admin.email,
       is_active: admin.isActive,
       is_creator: admin.isCreator,
+      role: "admin"
     };
 
     const accessToken = this.jwtService.sign(payload, {

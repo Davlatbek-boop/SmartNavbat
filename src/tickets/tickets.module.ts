@@ -18,5 +18,6 @@ import { MailModule } from "../mail/mail.module";
   ],
   controllers: [TicketsController],
   providers: [TicketsService],
+  exports: [TicketsService]
 })
 export class TicketsModule {}

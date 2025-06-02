@@ -9,6 +9,7 @@ import {
 import { ApiProperty } from "@nestjs/swagger";
 import { Notification } from "../../notifications/entities/notification.entity";
 import { Ticket } from "../../tickets/entities/ticket.entity";
+import { Feedback } from "../../feedback/entities/feedback.entity";
 
 @Entity()
 export class Client {
@@ -75,4 +76,7 @@ export class Client {
 
   @OneToMany(() => Ticket, (ticket) => ticket.client)
   ticket: Ticket[];
+
+  @OneToMany(()=> Feedback, (feedback)=> feedback.client)
+  feedback: Feedback[]
 }

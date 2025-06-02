@@ -4,12 +4,15 @@ import {
   CreateDateColumn,
   Entity,
   ManyToOne,
+  OneToMany,
   PrimaryGeneratedColumn,
   UpdateDateColumn,
 } from "typeorm";
 import { Client } from "../../clients/entities/client.entity";
 import { Service } from "../../services/entities/service.entity";
 import { Branch } from "../../branches/entities/branch.entity";
+import { Feedback } from "../../feedback/entities/feedback.entity";
+import { TicketStatusLog } from "../../ticket-status-log/entities/ticket-status-log.entity";
 
 @Entity()
 export class Ticket {
@@ -103,4 +106,10 @@ export class Ticket {
 
   @ManyToOne(() => Branch, (branch) => branch.ticket)
   branch: Branch;
+
+  @OneToMany(()=> Feedback, (feedback)=> feedback.client)
+  feedback: Feedback[]
+
+  @OneToMany(()=> TicketStatusLog, (ticketStatusLog)=> ticketStatusLog.ticket)
+  ticketStatusLog: TicketStatusLog[]
 }
