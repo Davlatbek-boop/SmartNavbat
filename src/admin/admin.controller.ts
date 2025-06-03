@@ -9,6 +9,7 @@ import {
   HttpCode,
   Res,
   Req,
+  UseGuards,
 } from "@nestjs/common";
 import { AdminService } from "./admin.service";
 import { CreateAdminDto } from "./dto/create-admin.dto";
@@ -24,13 +25,17 @@ import {
   ApiBearerAuth,
 } from "@nestjs/swagger";
 import { UpdatePasswordAdminDto } from "./dto/update-password.dto";
-
+import { AdminSelfGuard } from "../common/guards/admin-self.guard";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { CreatorGuard } from "../common/guards/creator.guard";
 
 @ApiTags("Admin")
 @Controller("admin")
 export class AdminController {
   constructor(private readonly adminService: AdminService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, CreatorGuard)
   @Post()
   @ApiOperation({ summary: "Yangi admin yaratish" })
   @ApiResponse({ status: 201, description: "Admin muvaffaqiyatli yaratildi" })
@@ -52,6 +57,7 @@ export class AdminController {
     return this.adminService.loginAdmin(loginAdminDto, res);
   }
 
+ 
   @Post("refresh-token")
   @ApiOperation({ summary: "Access tokenni refresh qilish" })
   @ApiResponse({ status: 200, description: "Token yangilandi" })
@@ -62,6 +68,8 @@ export class AdminController {
     return this.adminService.refreshToken(req, res);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminSelfGuard)
   @Get("logout")
   @ApiOperation({ summary: "Admin logout qilish" })
   @ApiResponse({ status: 200, description: "Logout muvaffaqiyatli" })
@@ -72,6 +80,8 @@ export class AdminController {
     return this.adminService.logoutAdmin(req, res);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, CreatorGuard)
   @Get()
   @ApiOperation({ summary: "Barcha adminlarni olish" })
   @ApiResponse({ status: 200, description: "Adminlar ro‘yxati" })
@@ -79,6 +89,8 @@ export class AdminController {
     return this.adminService.findAll();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminSelfGuard)
   @Get(":id")
   @ApiOperation({ summary: "Bitta adminni olish" })
   @ApiParam({ name: "id", type: Number })
@@ -88,6 +100,8 @@ export class AdminController {
     return this.adminService.findOne(+id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminSelfGuard)
   @Patch(":id")
   @ApiOperation({ summary: "Adminni yangilash" })
   @ApiParam({ name: "id", type: Number })
@@ -97,6 +111,8 @@ export class AdminController {
     return this.adminService.update(+id, updateAdminDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, CreatorGuard)
   @Delete(":id")
   @ApiOperation({ summary: "Adminni o‘chirish" })
   @ApiParam({ name: "id", type: Number })
@@ -105,6 +121,8 @@ export class AdminController {
     return this.adminService.remove(+id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminSelfGuard)
   @Patch("update-password/:id")
   @ApiOperation({ summary: "Admin parolini yangilash" })
   @ApiParam({ name: "id", type: Number, description: "Adminning ID raqami" })

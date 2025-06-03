@@ -17,11 +17,6 @@ export enum TicketStatus {
 }
 
 export class CreateTicketDto {
-  @ApiProperty({ example: 14, description: "Mijoz ID raqami" })
-  @IsNumber()
-  @IsNotEmpty()
-  clientId: number;
-
   @ApiProperty({ example: 3, description: "Xizmat ID raqami" })
   @IsNumber()
   @IsNotEmpty()
@@ -40,4 +35,12 @@ export class CreateTicketDto {
   @Min(1)
   @Max(3)
   priorityLevel: number;
+
+  @ApiProperty({
+    example: "pending",
+    description: "Navbat statusi",
+  })
+  @IsString()
+  status: string;
+
 }

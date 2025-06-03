@@ -7,6 +7,8 @@ import { Repository } from "typeorm";
 import { StaffService } from "../staff/staff.service";
 import { TicketsService } from "../tickets/tickets.service";
 import { CounterService } from "../counter/counter.service";
+import { MailService } from "../mail/mail.service";
+import { ClientsService } from "../clients/clients.service";
 
 @Injectable()
 export class CalledTicketsService {
@@ -15,7 +17,9 @@ export class CalledTicketsService {
     private readonly calledTicketRepo: Repository<CalledTicket>,
     private readonly staffService: StaffService,
     private readonly ticketService: TicketsService,
-    private readonly counterService: CounterService
+    private readonly counterService: CounterService,
+    private readonly sendMail: MailService,
+    private readonly clientService: ClientsService
   ) {}
   async create(createCalledTicketDto: CreateCalledTicketDto) {
     const staff = await this.staffService.findOne(
@@ -30,8 +34,8 @@ export class CalledTicketsService {
       createCalledTicketDto.ticketId
     );
 
-    if (!ticket) {
-      throw new BadRequestException("Bunday ticket mavjud emas");
+    if (!ticket || ticket.status != "pending") {
+      throw new BadRequestException("Bunday ticket mavjud emas yoki chaqirilgan");
     }
 
     const counter = await this.counterService.findOne(
@@ -52,7 +56,24 @@ export class CalledTicketsService {
       counter,
     });
 
-    this.ticketService.update(ticket.id,{calledAt: now})
+    this.ticketService.update(ticket.id, { calledAt: now, status: "called"});
+
+    const client = await this.clientService.findOne(ticket.clientId);
+
+    if (!client) {
+      throw new BadRequestException("Bu navbat olgan client mavjud emas");
+    }
+    
+    const info = {
+      counter: counter.counterNumber,
+      ticketNumber: ticket.ticketNumber,
+    };
+
+    try {
+      this.sendMail.sendMailComeTicket(info, client?.email);
+    } catch (error) {
+      console.log(error);
+    }
 
     return {
       message: `${ticket.ticketCode} - ${ticket.ticketNumber} raqamli navbat`,

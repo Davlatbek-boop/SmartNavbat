@@ -6,22 +6,36 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { TicketsService } from "./tickets.service";
 import { CreateTicketDto } from "./dto/create-ticket.dto";
 import { UpdateTicketDto } from "./dto/update-ticket.dto";
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
+import { AuthGuard } from "../common/guards/auth.guard";
 
-@ApiTags("Tickets") // Swaggerdagi grouping uchun
+@ApiBearerAuth()
+@ApiTags("Tickets")
 @Controller("tickets")
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @Post()
-  @ApiOperation({ summary: "Yangi chipta yaratish" })
+  @UseGuards(AuthGuard)
+  @Post(":id")
+  @ApiOperation({
+    summary: "Yangi chipta yaratish",
+    description:
+      "Bu endpoint faqat clientlar uchun muljallangan roli uchun mo‘ljallangan. Token yuborilishi shart.",
+  })
   @ApiResponse({ status: 201, description: "Chipta muvaffaqiyatli yaratildi" })
-  create(@Body() createTicketDto: CreateTicketDto) {
-    return this.ticketsService.create(createTicketDto);
+  create(@Param('id') id: string, @Body() createTicketDto: CreateTicketDto) {
+    return this.ticketsService.create(+id, createTicketDto);
   }
 
   @Get()

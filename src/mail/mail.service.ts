@@ -45,4 +45,13 @@ export class MailService {
       context: info
     });
   }
+
+  async sendMailComeTicket(info:object, email:string) {
+    await this.mailerService.sendMail({
+      to: email,
+      subject: "Sizning navbatingiz chaqirildi",
+      template: "./called-ticket",
+      context: info
+    });
+  }
 }

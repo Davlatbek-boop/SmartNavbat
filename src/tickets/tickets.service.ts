@@ -18,8 +18,8 @@ export class TicketsService {
     private readonly clientServie: ClientsService,
     private readonly MailService: MailService
   ) {}
-  async create(createTicketDto: CreateTicketDto) {
-    const client = await this.clientServie.findOne(createTicketDto.clientId);
+  async create(id: number, createTicketDto: CreateTicketDto) {
+    const client = await this.clientServie.findOne(id);
 
     if (!client) {
       throw new BadRequestException("Bunday client mavjud emas");
@@ -83,7 +83,7 @@ export class TicketsService {
       console.log(error);
     }
 
-    return info
+    return {...info, id: newTicket.id}
   }
 
   findAll() {

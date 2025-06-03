@@ -166,7 +166,7 @@ export class StaffService {
     await this.staffRepo.save(staff);
 
     return {
-      message: "staff logged successfully",
+      message: "refresh token yangilandi",
       token: tokens.accessToken,
     };
   }

@@ -161,18 +161,7 @@ export class AdminService {
   }
 
   findOne(id: number) {
-    return this.adminRepo.findOne({
-      select: [
-        "id",
-        "username",
-        "email",
-        "fullName",
-        "phoneNumber",
-        "isActive",
-        "isCreator",
-      ],
-      where: { id },
-    });
+    return this.adminRepo.findOneBy({id});
   }
 
   async update(id: number, updateAdminDto: UpdateAdminDto) {

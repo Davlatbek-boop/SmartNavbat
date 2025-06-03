@@ -8,6 +8,7 @@ import {
   Delete,
   Res,
   Req,
+  UseGuards,
 } from "@nestjs/common";
 import { ClientsService } from "./clients.service";
 import { CreateClientDto } from "./dto/create-client.dto";
@@ -21,9 +22,13 @@ import {
   ApiResponse,
   ApiParam,
   ApiBody,
+  ApiBearerAuth,
 } from "@nestjs/swagger";
 import { UpdatePasswordClientDto } from "./dto/update-password-client.dto";
+import { AdminGuard } from "../common/guards/admin.guard";
+import { AuthGuard } from "../common/guards/auth.guard";
 
+@ApiBearerAuth()
 @ApiTags("Clients")
 @Controller("clients")
 export class ClientsController {
@@ -87,6 +92,7 @@ export class ClientsController {
     return this.clientsService.refreshTokenClient(req, res);
   }
 
+  // @UseGuards(AuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: "Barcha mijozlarni olish" })
   @ApiResponse({
