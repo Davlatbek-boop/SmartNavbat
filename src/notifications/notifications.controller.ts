@@ -6,9 +6,9 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { NotificationsService } from "./notifications.service";
-import { CreateNotificationDto } from "./dto/create-notification.dto";
 import { UpdateNotificationDto } from "./dto/update-notification.dto";
 
 import {
@@ -17,30 +17,44 @@ import {
   ApiResponse,
   ApiParam,
   ApiBody,
+  ApiBearerAuth,
 } from "@nestjs/swagger";
+import { Roles } from "../common/decorators/roles-auth.decorator";
+import { RolesGuard } from "../common/guards/roles.guard";
+import { AuthGuard } from "../common/guards/auth.guard";
 
+@ApiBearerAuth()
+@Roles("hr_meneger", "admin")
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
 @ApiTags("Notifications")
 @Controller("notifications")
 export class NotificationsController {
   constructor(private readonly notificationsService: NotificationsService) {}
 
-  @Post()
-  @ApiOperation({ summary: "Yangi notification yaratish" })
-  @ApiBody({ type: CreateNotificationDto })
-  @ApiResponse({ status: 201, description: "Notification yaratildi." })
-  create(@Body() createNotificationDto: CreateNotificationDto) {
-    return this.notificationsService.create(createNotificationDto);
-  }
+  // @Post()
+  // @ApiOperation({ summary: "Yangi notification yaratish" })
+  // @ApiBody({ type: CreateNotificationDto })
+  // @ApiResponse({ status: 201, description: "Notification yaratildi." })
+  // create(@Body() createNotificationDto: CreateNotificationDto) {
+  //   return this.notificationsService.create(createNotificationDto);
+  // }
 
   @Get()
-  @ApiOperation({ summary: "Barcha notificationlarni olish" })
+  @ApiOperation({
+    summary: "Barcha notificationlarni olish",
+    description: "bu routga hr_meneger va admin huquqi bor",
+  })
   @ApiResponse({ status: 200, description: "Notificationlar ro'yxati." })
   findAll() {
     return this.notificationsService.findAll();
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "ID bo'yicha notification olish" })
+  @ApiOperation({
+    summary: "ID bo'yicha notification olish",
+    description: "bu routga hr_meneger va admin huquqi bor",
+  })
   @ApiParam({ name: "id", type: Number, description: "Notification ID" })
   @ApiResponse({ status: 200, description: "Notification topildi." })
   @ApiResponse({ status: 400, description: "Notification topilmadi." })
@@ -49,7 +63,10 @@ export class NotificationsController {
   }
 
   @Get("clientId/:clientId")
-  @ApiOperation({ summary: "Mijoz ID bo'yicha notificationlarni olish" })
+  @ApiOperation({
+    summary: "Mijoz ID bo'yicha notificationlarni olish",
+    description: "bu routga hr_meneger va admin huquqi bor",
+  })
   @ApiParam({ name: "clientId", type: Number, description: "Mijoz ID" })
   @ApiResponse({
     status: 200,
@@ -60,7 +77,10 @@ export class NotificationsController {
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Notificationni yangilash" })
+  @ApiOperation({
+    summary: "Notificationni yangilash",
+    description: "bu routga hr_meneger va admin huquqi bor",
+  })
   @ApiParam({
     name: "id",
     type: Number,
@@ -77,7 +97,10 @@ export class NotificationsController {
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Notificationni o'chirish" })
+  @ApiOperation({
+    summary: "Notificationni o'chirish",
+    description: "bu routga hr_meneger va admin huquqi bor",
+  })
   @ApiParam({
     name: "id",
     type: Number,

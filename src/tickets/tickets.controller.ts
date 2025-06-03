@@ -19,6 +19,7 @@ import {
   ApiBearerAuth,
 } from "@nestjs/swagger";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { ClientGuard } from "../common/guards/client.guard";
 
 @ApiBearerAuth()
 @ApiTags("Tickets")
@@ -26,7 +27,7 @@ import { AuthGuard } from "../common/guards/auth.guard";
 export class TicketsController {
   constructor(private readonly ticketsService: TicketsService) {}
 
-  @UseGuards(AuthGuard)
+  @UseGuards(AuthGuard, ClientGuard)
   @Post(":id")
   @ApiOperation({
     summary: "Yangi chipta yaratish",

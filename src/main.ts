@@ -1,7 +1,7 @@
 import { NestFactory } from "@nestjs/core";
 import { AppModule } from "./app.module";
 import { DocumentBuilder, SwaggerModule } from "@nestjs/swagger";
-import { ValidationPipe } from "@nestjs/common";
+import { BadRequestException, ValidationPipe } from "@nestjs/common";
 import * as cookieParser from "cookie-parser";
 import * as basicAuth from "express-basic-auth";
 
@@ -16,6 +16,25 @@ async function start() {
   app.useGlobalPipes(new ValidationPipe());
 
   app.setGlobalPrefix("api");
+
+  app.enableCors({
+    origin: (origin, callback) => {
+      const allowedOrigin = [
+        "http://localhost:3004",
+        "http://localhost:8000",
+        "http://smartnavbat.uz",
+        "http://smart.navbat.uz",
+        "http://smart.navbat.app",
+      ];
+      if (!origin || allowedOrigin.includes(origin)) {
+        callback(null, true);
+      } else {
+        callback(new BadRequestException("Not allowed by CORS"));
+      }
+    },
+    methods: "GET, HEAD, PUT, PATCH, POST, DELETE",
+    credentials: true,
+  });
 
   const config = new DocumentBuilder()
     .setTitle("Smart Navbat project")

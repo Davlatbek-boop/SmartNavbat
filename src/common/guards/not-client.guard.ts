@@ -3,7 +3,7 @@ import { Request } from "express";
 import { Observable } from "rxjs";
 
 @Injectable()
-export class ClientGuard implements CanActivate {
+export class NotClientGuard implements CanActivate {
   canActivate(
     context: ExecutionContext
   ): boolean | Promise<boolean> | Observable<boolean> {
@@ -11,12 +11,10 @@ export class ClientGuard implements CanActivate {
 
     const person = req.person;
 
-    if (!person.isCreator || person.role != "admin") {
-      if (person.id != req.params.id) {
-        throw new ForbiddenException({
+    if(person.role == 'client'){
+      throw new ForbiddenException({
           message: "Ruxsat etilmagan foydalanuvchi",
         });
-      }
     }
 
     return true;

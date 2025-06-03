@@ -27,8 +27,9 @@ import {
 import { UpdatePasswordClientDto } from "./dto/update-password-client.dto";
 import { AdminGuard } from "../common/guards/admin.guard";
 import { AuthGuard } from "../common/guards/auth.guard";
+import { ClientGuard } from "../common/guards/client.guard";
 
-@ApiBearerAuth()
+
 @ApiTags("Clients")
 @Controller("clients")
 export class ClientsController {
@@ -59,6 +60,8 @@ export class ClientsController {
     return this.clientsService.loginClient(loginClientDto, res);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, ClientGuard)
   @Get("logout")
   @ApiOperation({ summary: "Mijoz logout qilish" })
   @ApiResponse({ status: 200, description: "Logout muvaffaqiyatli" })
@@ -82,6 +85,7 @@ export class ClientsController {
     return this.clientsService.activateClient(link);
   }
 
+
   @Post("refresh-token")
   @ApiOperation({ summary: "Refresh token orqali tokenlarni yangilash" })
   @ApiResponse({ status: 200, description: "Tokenlar yangilandi" })
@@ -92,7 +96,7 @@ export class ClientsController {
     return this.clientsService.refreshTokenClient(req, res);
   }
 
-  // @UseGuards(AuthGuard, AdminGuard)
+  @UseGuards(AuthGuard, AdminGuard)
   @Get()
   @ApiOperation({ summary: "Barcha mijozlarni olish" })
   @ApiResponse({
@@ -104,6 +108,8 @@ export class ClientsController {
     return this.clientsService.findAll();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, ClientGuard)
   @Get(":id")
   @ApiOperation({ summary: "ID bo‘yicha bitta mijozni olish" })
   @ApiParam({ name: "id", type: Number, description: "Mijoz ID raqami" })
@@ -117,6 +123,8 @@ export class ClientsController {
     return this.clientsService.findOne(+id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, ClientGuard)
   @Patch(":id")
   @ApiOperation({ summary: "Mijoz ma‘lumotlarini yangilash" })
   @ApiParam({
@@ -135,6 +143,8 @@ export class ClientsController {
     return this.clientsService.update(+id, updateClientDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, AdminGuard)
   @Delete(":id")
   @ApiOperation({ summary: "Mijozni o‘chirish" })
   @ApiParam({
@@ -148,6 +158,8 @@ export class ClientsController {
     return this.clientsService.remove(+id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard, ClientGuard)
   @Patch("update-password/:id")
   @ApiOperation({ summary: "Client parolini yangilash" })
   @ApiParam({ name: "id", type: Number, description: "Clientning ID raqami" })

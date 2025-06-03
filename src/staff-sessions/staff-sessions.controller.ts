@@ -6,34 +6,54 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { StaffSessionsService } from "./staff-sessions.service";
 import { CreateStaffSessionDto } from "./dto/create-staff-session.dto";
 import { UpdateStaffSessionDto } from "./dto/update-staff-session.dto";
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
+import { Roles } from "../common/decorators/roles-auth.decorator";
+import { RolesGuard } from "../common/guards/roles.guard";
+import { AuthGuard } from "../common/guards/auth.guard";
 
-@ApiTags("Staff Sessions") // Swagger bo‘lim nomi
+@ApiBearerAuth()
+@Roles("hr_meneger", "admin", "branch_manager")
+@UseGuards(RolesGuard)
+@UseGuards(AuthGuard)
+@ApiTags("Staff Sessions")
 @Controller("staff-sessions")
 export class StaffSessionsController {
   constructor(private readonly staffSessionsService: StaffSessionsService) {}
 
-  @Post()
-  @ApiOperation({ summary: "Yangi xodim sessiyasini yaratish" })
-  @ApiResponse({ status: 201, description: "Sessiya muvaffaqiyatli yaratildi" })
-  @ApiResponse({ status: 400, description: "Noto‘g‘ri maʼlumot" })
-  create(@Body() createStaffSessionDto: CreateStaffSessionDto) {
-    return this.staffSessionsService.create(createStaffSessionDto);
-  }
+  // @Post()
+  // @ApiOperation({ summary: "Yangi xodim sessiyasini yaratish" })
+  // @ApiResponse({ status: 201, description: "Sessiya muvaffaqiyatli yaratildi" })
+  // @ApiResponse({ status: 400, description: "Noto‘g‘ri maʼlumot" })
+  // create(@Body() createStaffSessionDto: CreateStaffSessionDto) {
+  //   return this.staffSessionsService.create(createStaffSessionDto);
+  // }
 
   @Get()
-  @ApiOperation({ summary: "Barcha xodim sessiyalarini olish" })
+  @ApiOperation({
+    summary: "Barcha xodim sessiyalarini olish",
+    description: "bu routga branch_manager, hr_meneger va admin huquqi bor",
+  })
   @ApiResponse({ status: 200, description: "Sessiyalar ro‘yxati" })
   findAll() {
     return this.staffSessionsService.findAll();
   }
 
   @Get(":id")
-  @ApiOperation({ summary: "ID bo‘yicha bitta sessiyani olish" })
+  @ApiOperation({
+    summary: "ID bo‘yicha bitta sessiyani olish",
+    description: "bu routga branch_manager, hr_meneger va admin huquqi bor",
+  })
   @ApiParam({ name: "id", type: Number, description: "Sessiya ID raqami" })
   @ApiResponse({ status: 200, description: "Sessiya topildi" })
   @ApiResponse({ status: 404, description: "Sessiya topilmadi" })
@@ -42,7 +62,10 @@ export class StaffSessionsController {
   }
 
   @Patch(":id")
-  @ApiOperation({ summary: "Xodim sessiyasini yangilash" })
+  @ApiOperation({
+    summary: "Xodim sessiyasini yangilash",
+    description: "bu routga branch_manager, hr_meneger va admin huquqi bor",
+  })
   @ApiParam({ name: "id", type: Number, description: "Sessiya ID raqami" })
   @ApiResponse({ status: 200, description: "Sessiya yangilandi" })
   @ApiResponse({ status: 404, description: "Sessiya topilmadi" })
@@ -54,7 +77,10 @@ export class StaffSessionsController {
   }
 
   @Delete(":id")
-  @ApiOperation({ summary: "Xodim sessiyasini o‘chirish" })
+  @ApiOperation({
+    summary: "Xodim sessiyasini o‘chirish",
+    description: "bu routga branch_manager, hr_meneger va admin huquqi bor",
+  })
   @ApiParam({ name: "id", type: Number, description: "Sessiya ID raqami" })
   @ApiResponse({ status: 200, description: "Sessiya o‘chirildi" })
   @ApiResponse({ status: 404, description: "Sessiya topilmadi" })

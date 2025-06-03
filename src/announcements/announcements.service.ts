@@ -3,7 +3,7 @@ import { CreateAnnouncementDto } from "./dto/create-announcement.dto";
 import { UpdateAnnouncementDto } from "./dto/update-announcement.dto";
 import { InjectRepository } from "@nestjs/typeorm";
 import { Announcement } from "./entities/announcement.entity";
-import { Repository } from "typeorm";
+import { DataSource, Repository } from "typeorm";
 import { StaffService } from "../staff/staff.service";
 import { BranchesService } from "../branches/branches.service";
 
@@ -13,7 +13,7 @@ export class AnnouncementsService {
     @InjectRepository(Announcement)
     private readonly announcementRepo: Repository<Announcement>,
     private readonly staffService: StaffService,
-    private readonly branchService: BranchesService
+    private readonly branchService: BranchesService,
   ) {}
 
   async create(createAnnouncementDto: CreateAnnouncementDto) {

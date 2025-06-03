@@ -6,20 +6,33 @@ import {
   Patch,
   Param,
   Delete,
+  UseGuards,
 } from "@nestjs/common";
 import { CalledTicketsService } from "./called-tickets.service";
 import { CreateCalledTicketDto } from "./dto/create-called-ticket.dto";
 import { UpdateCalledTicketDto } from "./dto/update-called-ticket.dto";
-import { ApiTags, ApiOperation, ApiResponse, ApiParam } from "@nestjs/swagger";
+import {
+  ApiTags,
+  ApiOperation,
+  ApiResponse,
+  ApiParam,
+  ApiBearerAuth,
+} from "@nestjs/swagger";
 import { CalledTicket } from "./entities/called-ticket.entity";
+import { AuthGuard } from "../common/guards/auth.guard";
+import { AdminGuard } from "../common/guards/admin.guard";
+import { NotClientGuard } from "../common/guards/not-client.guard";
 
 @ApiTags("Called Tickets")
 @Controller("called-tickets")
 export class CalledTicketsController {
   constructor(private readonly calledTicketsService: CalledTicketsService) {}
 
+  @ApiBearerAuth()
+  @UseGuards(NotClientGuard)
+  @UseGuards(AuthGuard)
   @Post()
-  @ApiOperation({ summary: "Yangi chaqirilgan ticket yaratish" })
+  @ApiOperation({ summary: "Yangi chaqirilgan ticket yaratish", description:"stafflar, adminlar huquqi bor"})
   @ApiResponse({
     status: 201,
     description: "Yangi ticket muvaffaqiyatli yaratildi",
@@ -29,8 +42,10 @@ export class CalledTicketsController {
     return this.calledTicketsService.create(createCalledTicketDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AuthGuard)
   @Get()
-  @ApiOperation({ summary: "Barcha chaqirilgan ticketlarni olish" })
+  @ApiOperation({ summary: "Barcha chaqirilgan ticketlarni olish" , description: 'istalga tokeni bori'})
   @ApiResponse({
     status: 200,
     description: "Barcha ticketlar ro‘yxati",
@@ -40,8 +55,11 @@ export class CalledTicketsController {
     return this.calledTicketsService.findAll();
   }
 
+  @ApiBearerAuth()
+  @UseGuards(NotClientGuard)
+  @UseGuards(AuthGuard)
   @Get(":id")
-  @ApiOperation({ summary: "ID bo‘yicha bitta ticketni olish" })
+  @ApiOperation({ summary: "ID bo‘yicha bitta ticketni olish", description:"stafflar, adminlar huquqi bor" })
   @ApiParam({ name: "id", type: Number, description: "Ticket ID raqami" })
   @ApiResponse({
     status: 200,
@@ -53,8 +71,11 @@ export class CalledTicketsController {
     return this.calledTicketsService.findOne(+id);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard)
   @Patch(":id")
-  @ApiOperation({ summary: "Ticket maʼlumotlarini yangilash" })
+  @ApiOperation({ summary: "Ticket maʼlumotlarini yangilash", description: "faqat adminlarga huquq bor" })
   @ApiParam({
     name: "id",
     type: Number,
@@ -72,8 +93,11 @@ export class CalledTicketsController {
     return this.calledTicketsService.update(+id, updateCalledTicketDto);
   }
 
+  @ApiBearerAuth()
+  @UseGuards(AdminGuard)
+  @UseGuards(AuthGuard)
   @Delete(":id")
-  @ApiOperation({ summary: "Ticketni o‘chirish" })
+  @ApiOperation({ summary: "Ticketni o‘chirish" , description: "faqat adminlarga huquq bor"})
   @ApiParam({
     name: "id",
     type: Number,
